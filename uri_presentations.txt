@@ -1,0 +1,10 @@
+/presentations/jenkins-world-2017-gavinmogan-saucelabs/
+/presentations/codecoffee-no-rest-for-the-wicked/
+/presentations/codecoffee-why-not-testing/
+/presentations/codecoffee-vagrant/
+/presentations/react-vs-angular/
+/presentations/stats/
+/presentations/linux101/
+/presentations/devops/
+/presentations/vim/
+

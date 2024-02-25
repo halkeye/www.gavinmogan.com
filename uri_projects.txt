@@ -1,0 +1,16 @@
+/projects/radiant-joanna/
+/projects/soundboard/
+/projects/MTLJPost/
+/projects/flask-atlassian-connect/
+/projects/ecm/
+/projects/dark-warriors/
+/projects/hipchat-dance-party/
+/projects/ingrid-intimidator/
+/projects/infinicatr/
+/projects/jira-cloud-and-bamboohr-integration/
+/projects/kode_foto_backup/
+/projects/npm-modules/
+/projects/salty-stories-web/
+/projects/unknown-regions/
+/projects/zabox/
+
