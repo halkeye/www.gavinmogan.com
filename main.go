@@ -24,16 +24,15 @@ var uriProjects string
 var uriPresentations string
 
 type urlRedirectors struct {
-	uris   []string
-	target string
+	uris       []string
+	target     string
+	trimPrefix string
 }
 
 var log = logrus.New()
 
 // TODO
 // * log 404s
-// * fix blog redirects
-// * fix static routes
 func setupRoutes(router *http.ServeMux) {
 	router.Handle("/", http.FileServer(http.Dir("./static")))
 
@@ -43,8 +42,9 @@ func setupRoutes(router *http.ServeMux) {
 			target: "https://blog.gavinmogan.com",
 		},
 		{
-			uris:   strings.Split(uriProjects, "\n"),
-			target: "https://apps.gavinmogan.com",
+			uris:       strings.Split(uriProjects, "\n"),
+			target:     "https://apps.gavinmogan.com",
+			trimPrefix: "/projects",
 		},
 	}
 
@@ -54,7 +54,14 @@ func setupRoutes(router *http.ServeMux) {
 				continue
 			}
 			uri = filepath.Clean(uri)
-			router.Handle(uri, http.RedirectHandler(redirector.target+uri, http.StatusMovedPermanently))
+			router.Handle(uri, http.RedirectHandler(
+				redirector.target+strings.TrimPrefix(uri, redirector.trimPrefix),
+				http.StatusMovedPermanently,
+			))
+			router.Handle(uri+"/", http.RedirectHandler(
+				redirector.target+strings.TrimPrefix(uri, redirector.trimPrefix),
+				http.StatusMovedPermanently,
+			))
 		}
 	}
 }

@@ -13,4 +13,4 @@
 /projects/salty-stories-web/
 /projects/unknown-regions/
 /projects/zabox/
-
+/projects/

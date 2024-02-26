@@ -6,6 +6,8 @@ import (
 	"regexp"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 var urlsFromSitemap = `
@@ -358,6 +360,16 @@ func TestSitemap(t *testing.T) {
 			statusCode := resp.Result().StatusCode
 			if statusCode != 200 && statusCode != 301 {
 				t.Fatalf("the status code should be 200 or 301 but received [%d]", statusCode)
+			}
+
+			if statusCode == 301 {
+				req, err := http.NewRequest(http.MethodGet, resp.Result().Header.Get("Location"), nil)
+				require.NoError(t, err, "creating request")
+
+				res, err := http.DefaultClient.Do(req)
+				require.NoError(t, err, "creating request")
+
+				require.Equal(t, res.StatusCode, 200, "Ends in valid locaiton")
 			}
 		})
 	}
