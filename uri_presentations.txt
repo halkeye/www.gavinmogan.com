@@ -7,4 +7,4 @@
 /presentations/linux101/
 /presentations/devops/
 /presentations/vim/
-
+/presentations/

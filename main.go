@@ -46,6 +46,11 @@ func setupRoutes(router *http.ServeMux) {
 			target:     "https://apps.gavinmogan.com",
 			trimPrefix: "/projects",
 		},
+		{
+			uris:       strings.Split(uriPresentations, "\n"),
+			target:     "https://presentations.gavinmogan.com",
+			trimPrefix: "/presentations",
+		},
 	}
 
 	for _, redirector := range redirectors {
