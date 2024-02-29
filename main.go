@@ -35,48 +35,6 @@ type urlRedirectors struct {
 
 var log = logrus.New()
 
-func setupRoutes(router *http.ServeMux) {
-	sub, err := fs.Sub(staticDir, "static")
-	if err != nil {
-		panic(err)
-	}
-	router.Handle("/", http.FileServer(http.FS(sub)))
-
-	redirectors := []urlRedirectors{
-		{
-			uris:   strings.Split(uriBlogs, "\n"),
-			target: "https://blog.gavinmogan.com",
-		},
-		{
-			uris:       strings.Split(uriProjects, "\n"),
-			target:     "https://apps.gavinmogan.com",
-			trimPrefix: "/projects",
-		},
-		{
-			uris:       strings.Split(uriPresentations, "\n"),
-			target:     "https://presentations.gavinmogan.com",
-			trimPrefix: "/presentations",
-		},
-	}
-
-	for _, redirector := range redirectors {
-		for _, uri := range redirector.uris {
-			if len(uri) == 0 {
-				continue
-			}
-			uri = filepath.Clean(uri)
-			router.Handle(uri, http.RedirectHandler(
-				redirector.target+strings.TrimPrefix(uri, redirector.trimPrefix),
-				http.StatusMovedPermanently,
-			))
-			router.Handle(uri+"/", http.RedirectHandler(
-				redirector.target+strings.TrimPrefix(uri, redirector.trimPrefix),
-				http.StatusMovedPermanently,
-			))
-		}
-	}
-}
-
 func main() {
 	var listenAddr string
 	flag.StringVar(&listenAddr, "listen-addr", ":8090", "server listen address")
@@ -144,19 +102,17 @@ func logging(log *logrus.Logger) func(http.Handler) http.Handler {
 	}
 }
 
-type (
-	// struct for holding response details
-	responseData struct {
-		status int
-		size   int
-	}
+// struct for holding response details
+type responseData struct {
+	status int
+	size   int
+}
 
-	// our http.ResponseWriter implementation
-	loggingResponseWriter struct {
-		http.ResponseWriter // compose original http.ResponseWriter
-		responseData        *responseData
-	}
-)
+// our http.ResponseWriter implementation
+type loggingResponseWriter struct {
+	http.ResponseWriter // compose original http.ResponseWriter
+	responseData        *responseData
+}
 
 func (r *loggingResponseWriter) Write(b []byte) (int, error) {
 	size, err := r.ResponseWriter.Write(b) // write response using original http.ResponseWriter
@@ -198,4 +154,66 @@ func WithLogging(h http.Handler) http.Handler {
 		}
 	}
 	return http.HandlerFunc(loggingFn)
+}
+
+func getAllFilenames(efs fs.FS) (files []string, err error) {
+	if err := fs.WalkDir(efs, ".", func(path string, d fs.DirEntry, err error) error {
+		if d.IsDir() {
+			return nil
+		}
+
+		files = append(files, path)
+
+		return nil
+	}); err != nil {
+		return nil, err
+	}
+
+	return files, nil
+}
+
+func setupRoutes(router *http.ServeMux) {
+	sub, err := fs.Sub(staticDir, "static")
+	if err != nil {
+		panic(err)
+	}
+
+	files, _ := getAllFilenames(sub)
+	logrus.WithFields(logrus.Fields{"files": files}).Info("files")
+
+	router.Handle("/", http.FileServer(http.FS(sub)))
+
+	redirectors := []urlRedirectors{
+		{
+			uris:   strings.Split(uriBlogs, "\n"),
+			target: "https://blog.gavinmogan.com",
+		},
+		{
+			uris:       strings.Split(uriProjects, "\n"),
+			target:     "https://apps.gavinmogan.com",
+			trimPrefix: "/projects",
+		},
+		{
+			uris:       strings.Split(uriPresentations, "\n"),
+			target:     "https://presentations.gavinmogan.com",
+			trimPrefix: "/presentations",
+		},
+	}
+
+	for _, redirector := range redirectors {
+		for _, uri := range redirector.uris {
+			if len(uri) == 0 {
+				continue
+			}
+			uri = filepath.Clean(uri)
+			router.Handle(uri, http.RedirectHandler(
+				redirector.target+strings.TrimPrefix(uri, redirector.trimPrefix),
+				http.StatusMovedPermanently,
+			))
+			router.Handle(uri+"/", http.RedirectHandler(
+				redirector.target+strings.TrimPrefix(uri, redirector.trimPrefix),
+				http.StatusMovedPermanently,
+			))
+		}
+	}
 }

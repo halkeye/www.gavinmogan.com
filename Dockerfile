@@ -8,7 +8,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY *.go *.txt ./
-COPY static static
+COPY static/ static/
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o /docker-website
 
