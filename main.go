@@ -24,7 +24,7 @@ var uriProjects string
 //go:embed uri_presentations.txt
 var uriPresentations string
 
-//go:embed static
+//go:embed static/**
 var staticDir embed.FS
 
 type urlRedirectors struct {
