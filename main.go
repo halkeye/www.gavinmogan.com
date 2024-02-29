@@ -185,13 +185,17 @@ func WithLogging(h http.Handler) http.Handler {
 
 		duration := time.Since(start)
 
-		logrus.WithFields(logrus.Fields{
-			"uri":      req.RequestURI,
-			"method":   req.Method,
-			"status":   responseData.status,
-			"duration": duration,
-			"size":     responseData.size,
-		}).Info("request completed")
+		if !strings.HasPrefix(req.RequestURI, "/page-data/") && !strings.HasPrefix(req.RequestURI, "/favicon.ico") {
+			logrus.WithFields(logrus.Fields{
+				"uri":       req.RequestURI,
+				"method":    req.Method,
+				"useragent": req.Header.Get("User-Agent"),
+				"host":      req.Header.Get("Host"),
+				"status":    responseData.status,
+				"duration":  duration,
+				"size":      responseData.size,
+			}).Info("request completed")
+		}
 	}
 	return http.HandlerFunc(loggingFn)
 }
