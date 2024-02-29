@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/taskfile.json
+version: '3'
+
+tasks:
+  default:
+    deps:
+      - task: build
+      - task: assets
+
+  build:
+    cmds:
+      - go build -v main.go
+
+  assets:
+    cmds:
+      - npx tailwindcss -i ./static/style.css -o ./static/output.css
+    sources:
+      - ./static/style.css
+      - ./static/*.html
+      - ./tailwind.config.js
+    generates:
+      - static/output.css

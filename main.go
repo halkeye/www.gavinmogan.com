@@ -2,8 +2,9 @@ package main
 
 import (
 	"context"
-	_ "embed"
+	"embed"
 	"flag"
+	"io/fs"
 	"net/http"
 	"os"
 	"os/signal"
@@ -23,6 +24,9 @@ var uriProjects string
 //go:embed uri_presentations.txt
 var uriPresentations string
 
+//go:embed static
+var staticDir embed.FS
+
 type urlRedirectors struct {
 	uris       []string
 	target     string
@@ -31,10 +35,12 @@ type urlRedirectors struct {
 
 var log = logrus.New()
 
-// TODO
-// * log 404s
 func setupRoutes(router *http.ServeMux) {
-	router.Handle("/", http.FileServer(http.Dir("./static")))
+	sub, err := fs.Sub(staticDir, "static")
+	if err != nil {
+		panic(err)
+	}
+	router.Handle("/", http.FileServer(http.FS(sub)))
 
 	redirectors := []urlRedirectors{
 		{

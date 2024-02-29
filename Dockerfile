@@ -8,6 +8,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY *.go *.txt ./
+COPY static static
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o /docker-website
 
@@ -21,7 +22,6 @@ FROM gcr.io/distroless/base-debian11 AS build-release-stage
 WORKDIR /
 
 COPY --from=build-stage /docker-website /docker-website
-COPY static /static
 
 EXPOSE 8090
 

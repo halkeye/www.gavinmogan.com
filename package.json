@@ -1,0 +1,20 @@
+{
+  "name": "www-gavinmogan-com-2",
+  "version": "1.0.0",
+  "description": "Small docker app to manage redirecting legacy content, and serve small files",
+  "main": "tailwind.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/halkeye/www.gavinmogan.com.git"
+  },
+  "keywords": [],
+  "author": "Gavin Mogan <npm@gavinmogan.com> (https://www.gavinmogan.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/halkeye/www.gavinmogan.com/issues"
+  },
+  "homepage": "https://github.com/halkeye/www.gavinmogan.com#readme"
+}
