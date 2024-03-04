@@ -47,7 +47,7 @@ func main() {
 
 	server := &http.Server{
 		Addr:         listenAddr,
-		Handler:      WithLogging(router),
+		Handler:      withLogging(router),
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
 		IdleTimeout:  15 * time.Second,
@@ -125,7 +125,7 @@ func (r *loggingResponseWriter) WriteHeader(statusCode int) {
 	r.responseData.status = statusCode       // capture status code
 }
 
-func WithLogging(h http.Handler) http.Handler {
+func withLogging(h http.Handler) http.Handler {
 	loggingFn := func(rw http.ResponseWriter, req *http.Request) {
 		start := time.Now()
 
@@ -181,7 +181,7 @@ func setupRoutes(router *http.ServeMux) {
 	files, _ := getAllFilenames(sub)
 	logrus.WithFields(logrus.Fields{"files": files}).Info("files")
 
-	router.Handle("/", http.FileServer(http.FS(sub)))
+	router.Handle("/", withCors(http.FileServer(http.FS(sub))))
 
 	redirectors := []urlRedirectors{
 		{
@@ -216,4 +216,10 @@ func setupRoutes(router *http.ServeMux) {
 			))
 		}
 	}
+}
+
+func withCors(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+		rw.Header().Set("Access-Control-Allow-Origin", "*")
+	})
 }
