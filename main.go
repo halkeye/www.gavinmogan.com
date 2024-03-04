@@ -80,28 +80,6 @@ func main() {
 	log.Println("Server stopped")
 }
 
-func logging(log *logrus.Logger) func(http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			start := time.Now()
-
-			uri := r.RequestURI
-			method := r.Method
-
-			// log request details
-			defer func() {
-				duration := time.Since(start)
-				log.WithFields(logrus.Fields{
-					"uri":      uri,
-					"method":   method,
-					"duration": duration,
-				}).Println("Request")
-			}()
-			next.ServeHTTP(w, r)
-		})
-	}
-}
-
 // struct for holding response details
 type responseData struct {
 	status int
@@ -221,5 +199,6 @@ func setupRoutes(router *http.ServeMux) {
 func withCors(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		rw.Header().Set("Access-Control-Allow-Origin", "*")
+		h.ServeHTTP(rw, req)
 	})
 }
