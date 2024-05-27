@@ -6,7 +6,7 @@
         "url": "https://matrix-sliding-sync.g4v.dev"
     },
     "org.matrix.msc2965.authentication": {
-      "issuer": "https://matrix-auth.g4v.dev",
+      "issuer": "https://matrix-auth.g4v.dev/",
       "account": "https://auth.g4v.dev"
     }
 }
