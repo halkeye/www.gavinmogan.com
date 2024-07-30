@@ -37,11 +37,13 @@ var log = logrus.New()
 
 func main() {
 	var listenAddr string
+	var httpsOnly bool
 	flag.StringVar(&listenAddr, "listen-addr", ":8090", "server listen address")
+	flag.BoolVar(&httpsOnly, "https-only", false, "dont allow http request")
 	flag.Parse()
 
 	router := http.NewServeMux()
-	setupRoutes(router)
+	setupRoutes(router, httpsOnly)
 
 	log.Println("Server is starting...")
 
@@ -150,7 +152,7 @@ func getAllFilenames(efs fs.FS) (files []string, err error) {
 	return files, nil
 }
 
-func setupRoutes(router *http.ServeMux) {
+func setupRoutes(router *http.ServeMux, httpsOnly bool) {
 	sub, err := fs.Sub(staticDir, "static")
 	if err != nil {
 		panic(err)
@@ -159,7 +161,7 @@ func setupRoutes(router *http.ServeMux) {
 	files, _ := getAllFilenames(sub)
 	logrus.WithFields(logrus.Fields{"files": files}).Info("files")
 
-	router.Handle("/", withCors(http.FileServer(http.FS(sub))))
+	router.Handle("/", withFrameOptions(withContentTypeOptions(withReferralPolicy(withCSP(httpsOnly, withCors(http.FileServer(http.FS(sub))))))))
 
 	redirectors := []urlRedirectors{
 		{
@@ -199,6 +201,39 @@ func setupRoutes(router *http.ServeMux) {
 func withCors(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		rw.Header().Set("Access-Control-Allow-Origin", "*")
+		h.ServeHTTP(rw, req)
+	})
+}
+
+func withCSP(httpsOnly bool, h http.Handler) http.Handler {
+	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+		csp := "default-src 'none'; script-src 'self'; script-src-elem 'self'; script-src-attr 'self'; style-src 'self'; style-src-elem 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; prefetch-src 'self'; child-src 'none'; frame-src 'none'; worker-src 'none'; frame-ancestors 'none'; form-action 'none'; disown-opener"
+		if httpsOnly {
+			csp = csp + "; upgrade-insecure-requests"
+			csp = csp + "; block-all-mixed-content"
+		}
+		rw.Header().Set("Content-Security-Policy", csp)
+		h.ServeHTTP(rw, req)
+	})
+}
+
+func withReferralPolicy(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+		rw.Header().Set("Referrer-Policy", "no-referrer")
+		h.ServeHTTP(rw, req)
+	})
+}
+
+func withContentTypeOptions(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+		rw.Header().Set("X-Content-Type-Options", "no-sniff")
+		h.ServeHTTP(rw, req)
+	})
+}
+
+func withFrameOptions(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+		rw.Header().Set("X-Frame-Options", "DENY")
 		h.ServeHTTP(rw, req)
 	})
 }

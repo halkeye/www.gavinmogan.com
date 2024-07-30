@@ -28,3 +28,4 @@ EXPOSE 8090
 USER nonroot:nonroot
 
 ENTRYPOINT ["/docker-website"]
+CMD ["-https-only"]
