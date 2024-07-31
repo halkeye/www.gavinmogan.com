@@ -226,7 +226,7 @@ func withReferralPolicy(h http.Handler) http.Handler {
 
 func withContentTypeOptions(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		rw.Header().Set("X-Content-Type-Options", "no-sniff")
+		rw.Header().Set("X-Content-Type-Options", "nosniff")
 		h.ServeHTTP(rw, req)
 	})
 }
