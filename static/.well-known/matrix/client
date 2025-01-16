@@ -6,6 +6,7 @@
     "restrictBaseUrl": "https://matrix.g4v.dev",
     "asManagedUsers": [
       "^@telegram_[a-zA-Z0-9]+:g4v\\.dev$",
+      "^@googlechat_[a-zA-Z0-9]+:g4v\\.dev$",
       "^@signal_[a-zA-Z0-9]+:g4v\\.dev$",
       "^@instagram_[a-zA-Z0-9]+:g4v\\.dev$",
       "^@linkedin_[a-zA-Z0-9]+:g4v\\.dev$",
