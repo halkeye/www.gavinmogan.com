@@ -3,7 +3,7 @@
     "base_url": "https://matrix.g4v.dev"
   },
   "cc.etke.synapse-admin": {
-    "restrictBaseUrl": "https://matrix.g4v.dev",
+    "disabled.restrictBaseUrl": "https://matrix.g4v.dev",
     "asManagedUsers": [
       "^@telegram_[a-zA-Z0-9]+:g4v\\.dev$",
       "^@googlechat_[a-zA-Z0-9]+:g4v\\.dev$",
