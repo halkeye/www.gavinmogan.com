@@ -16,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/halkeye/www.gavinmogan.com/issues"
   },
-  "homepage": "https://github.com/halkeye/www.gavinmogan.com#readme"
+  "homepage": "https://github.com/halkeye/www.gavinmogan.com#readme",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.7",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.1.7"
+  }
 }
