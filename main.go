@@ -216,7 +216,7 @@ func withCSP(httpsOnly bool, h http.Handler) http.Handler {
 			"style-src-elem 'self'",
 			"img-src 'self'",
 			"font-src 'self'",
-			"connect-src 'none'",
+			"connect-src https://u.g4v.dev/api/send",
 			"media-src 'none'",
 			"object-src 'none'",
 			"prefetch-src 'self'",
