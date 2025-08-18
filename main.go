@@ -207,12 +207,31 @@ func withCors(h http.Handler) http.Handler {
 
 func withCSP(httpsOnly bool, h http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		csp := "default-src 'none'; script-src 'self' 'https://p.g4v.dev/' 'https://u.g4v.dev/' 'sha256-ZswfTY7H35rbv8WC7NXBoiC7WNu86vSzCDChNWwZZDM='; script-src-elem 'self'; script-src-attr 'self'; style-src 'self'; style-src-elem 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; prefetch-src 'self'; child-src 'none'; frame-src 'none'; worker-src 'none'; frame-ancestors 'none'; form-action 'none'; disown-opener"
-		if httpsOnly {
-			csp = csp + "; upgrade-insecure-requests"
-			csp = csp + "; block-all-mixed-content"
+		csp := []string{
+			"default-src 'none'",
+			"script-src 'self' 'https://p.g4v.dev/' 'https://u.g4v.dev/' 'sha256-ZswfTY7H35rbv8WC7NXBoiC7WNu86vSzCDChNWwZZDM='",
+			"script-src-elem 'self'",
+			"script-src-attr 'self' 'https://p.g4v.dev/' 'https://u.g4v.dev/' 'sha256-ZswfTY7H35rbv8WC7NXBoiC7WNu86vSzCDChNWwZZDM='",
+			"style-src 'self'",
+			"style-src-elem 'self'",
+			"img-src 'self'",
+			"font-src 'self'",
+			"connect-src 'none'",
+			"media-src 'none'",
+			"object-src 'none'",
+			"prefetch-src 'self'",
+			"child-src 'none'",
+			"frame-src 'none'",
+			"worker-src 'none'",
+			"frame-ancestors 'none'",
+			"form-action 'none'",
+			"disown-opener",
 		}
-		rw.Header().Set("Content-Security-Policy", csp)
+		if httpsOnly {
+			csp = append(csp, "upgrade-insecure-requests")
+			csp = append(csp, "block-all-mixed-content")
+		}
+		rw.Header().Set("Content-Security-Policy", strings.Join(csp, "; "))
 		h.ServeHTTP(rw, req)
 	})
 }
