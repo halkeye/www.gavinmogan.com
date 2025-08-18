@@ -210,8 +210,9 @@ func withCSP(httpsOnly bool, h http.Handler) http.Handler {
 		csp := []string{
 			"default-src 'none'",
 			"script-src 'self' 'https://p.g4v.dev/' 'https://u.g4v.dev/' 'sha256-ZswfTY7H35rbv8WC7NXBoiC7WNu86vSzCDChNWwZZDM='",
-			"script-src-elem 'self'",
-			"script-src-attr 'self' 'https://p.g4v.dev/' 'https://u.g4v.dev/' 'sha256-ZswfTY7H35rbv8WC7NXBoiC7WNu86vSzCDChNWwZZDM='",
+			"script-src-elem 'self' 'https://p.g4v.dev/' 'https://u.g4v.dev/' 'sha256-ZswfTY7H35rbv8WC7NXBoiC7WNu86vSzCDChNWwZZDM='",
+			// prevents <button id="btn" onclick="doSomething()"></button>
+			"script-src-attr 'none'",
 			"style-src 'self'",
 			"style-src-elem 'self'",
 			"img-src 'self'",
