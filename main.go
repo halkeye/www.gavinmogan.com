@@ -207,7 +207,7 @@ func withCors(h http.Handler) http.Handler {
 
 func withCSP(httpsOnly bool, h http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		csp := "default-src 'none'; script-src 'sha256-ZswfTY7H35rbv8WC7NXBoiC7WNu86vSzCDChNWwZZDM='; script-src-elem 'self'; script-src-attr 'self'; style-src 'self'; style-src-elem 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; prefetch-src 'self'; child-src 'none'; frame-src 'none'; worker-src 'none'; frame-ancestors 'none'; form-action 'none'; disown-opener"
+		csp := "default-src 'none'; script-src 'self' 'https://p.g4v.dev/' 'https://u.g4v.dev/' 'sha256-ZswfTY7H35rbv8WC7NXBoiC7WNu86vSzCDChNWwZZDM='; script-src-elem 'self'; script-src-attr 'self'; style-src 'self'; style-src-elem 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; prefetch-src 'self'; child-src 'none'; frame-src 'none'; worker-src 'none'; frame-ancestors 'none'; form-action 'none'; disown-opener"
 		if httpsOnly {
 			csp = csp + "; upgrade-insecure-requests"
 			csp = csp + "; block-all-mixed-content"
