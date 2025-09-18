@@ -209,7 +209,7 @@ func withCSP(httpsOnly bool, h http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		csp := []string{
 			"default-src 'none'",
-			"script-src-elem 'self' https://p.g4v.dev/ https://u.g4v.dev/",
+			"script-src-elem 'self' https://u.g4v.dev/",
 			// prevents <button id="btn" onclick="doSomething()"></button>
 			"script-src-attr 'none'",
 			"style-src 'self'",
