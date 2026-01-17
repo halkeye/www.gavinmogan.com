@@ -2,9 +2,10 @@
   "m.homeserver": {
     "base_url": "https://matrix.g4v.dev"
   },
-  "disabled-cc.etke.synapse-admin": {
-    "disabled-restrictBaseUrl": "https://matrix.g4v.dev",
-    "disabled-asManagedUsers": [
+  "cc.etke.synapse-admin": {
+    "externalAuthProvider": true,
+    "restrictBaseUrl": "https://matrix.g4v.dev",
+    "asManagedUsers": [
       "^@telegram_[a-zA-Z0-9]+:g4v\\.dev$",
       "^@googlechat_[a-zA-Z0-9]+:g4v\\.dev$",
       "^@signal_[a-zA-Z0-9]+:g4v\\.dev$",
