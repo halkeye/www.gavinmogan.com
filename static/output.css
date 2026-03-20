@@ -205,6 +205,9 @@
   .ml-auto {
     margin-left: auto;
   }
+  .contents {
+    display: contents;
+  }
   .flex {
     display: flex;
   }
@@ -214,6 +217,9 @@
   .h-6 {
     height: calc(var(--spacing) * 6);
   }
+  .h-16 {
+    height: calc(var(--spacing) * 16);
+  }
   .h-32 {
     height: calc(var(--spacing) * 32);
   }
@@ -222,6 +228,9 @@
   }
   .w-6 {
     width: calc(var(--spacing) * 6);
+  }
+  .w-16 {
+    width: calc(var(--spacing) * 16);
   }
   .w-32 {
     width: calc(var(--spacing) * 32);

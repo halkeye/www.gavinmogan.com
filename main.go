@@ -38,12 +38,15 @@ var log = logrus.New()
 func main() {
 	var listenAddr string
 	var httpsOnly bool
+	var skipCSP bool
+
 	flag.StringVar(&listenAddr, "listen-addr", ":8090", "server listen address")
 	flag.BoolVar(&httpsOnly, "https-only", false, "dont allow http request")
+	flag.BoolVar(&skipCSP, "skip-csp", false, "dont output csp headers, good for dev")
 	flag.Parse()
 
 	router := http.NewServeMux()
-	setupRoutes(router, httpsOnly)
+	setupRoutes(router, httpsOnly, skipCSP)
 
 	log.Println("Server is starting...")
 
@@ -152,7 +155,7 @@ func getAllFilenames(efs fs.FS) (files []string, err error) {
 	return files, nil
 }
 
-func setupRoutes(router *http.ServeMux, httpsOnly bool) {
+func setupRoutes(router *http.ServeMux, httpsOnly bool, skipCSP bool) {
 	sub, err := fs.Sub(staticDir, "static")
 	if err != nil {
 		panic(err)
@@ -161,7 +164,7 @@ func setupRoutes(router *http.ServeMux, httpsOnly bool) {
 	files, _ := getAllFilenames(sub)
 	logrus.WithFields(logrus.Fields{"files": files}).Info("files")
 
-	router.Handle("/", withFrameOptions(withContentTypeOptions(withReferralPolicy(withCSP(httpsOnly, withCors(http.FileServer(http.FS(sub))))))))
+	router.Handle("/", withFrameOptions(withContentTypeOptions(withReferralPolicy(withCSP(httpsOnly, skipCSP, withCors(http.FileServer(http.FS(sub))))))))
 
 	redirectors := []urlRedirectors{
 		{
@@ -205,7 +208,11 @@ func withCors(h http.Handler) http.Handler {
 	})
 }
 
-func withCSP(httpsOnly bool, h http.Handler) http.Handler {
+func withCSP(httpsOnly bool, skipCSP bool, h http.Handler) http.Handler {
+	if skipCSP {
+		return h
+	}
+
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		csp := []string{
 			"default-src 'none'",
