@@ -14,11 +14,10 @@
       "^@whatsapp_[a-zA-Z0-9]+:g4v\\.dev$"
     ]
   },
-  "disabled.org.matrix.msc3575.proxy": {
-    "url": "https://matrix-sliding-sync.g4v.dev"
-  },
-  "disabled.org.matrix.msc2965.authentication": {
-    "issuer": "https://matrix-auth.g4v.dev/",
-    "account": "https://auth.g4v.dev"
-  }
+  "org.matrix.msc4143.rtc_foci": [
+    {
+      "livekit_service_url": "https://matrix-rtc.g4v.dev",
+      "type": "livekit"
+    }
+  ]
 }
