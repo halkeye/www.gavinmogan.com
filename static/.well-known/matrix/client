@@ -17,7 +17,7 @@
       "^@whatsapp_[a-zA-Z0-9]+:g4v\\.dev$"
     ],
     "disabled": [
-      "^@linkedin_[a-zA-Z0-9]+:g4v\\.dev$",
+      "^@linkedin_[a-zA-Z0-9]+:g4v\\.dev$"
     ]
   },
   "org.matrix.msc4143.rtc_foci": [
