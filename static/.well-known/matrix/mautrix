@@ -4,6 +4,7 @@
     "https://mautrix-bridges.g4v.dev/instagram",
     "https://mautrix-bridges.g4v.dev/gmessages",
     "https://mautrix-bridges.g4v.dev/signal",
-    "https://mautrix-bridges.g4v.dev/whatsapp"
+    "https://mautrix-bridges.g4v.dev/whatsapp",
+    "https://mautrix-bridges.g4v.dev/bluesky"
   ]
 }
