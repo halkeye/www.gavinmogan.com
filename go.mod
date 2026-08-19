@@ -3,8 +3,8 @@ module github.com/halkeye/www-gavinmogan-com
 go 1.23
 
 require (
-	github.com/sirupsen/logrus v1.10.0
-	github.com/stretchr/testify v1.11.1
+	github.com/sirupsen/logrus v1.10.1
+	github.com/stretchr/testify v1.12.0
 )
 
 require (
